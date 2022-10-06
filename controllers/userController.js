@@ -9,7 +9,10 @@ const bcrypt = require("bcrypt");
 // @access Private
 
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find().select("-password").lean(); // .populate("Cart").
+  const query = req.query.new;
+  const users = query
+    ? await User.find().sort({ _id: -1 }).limit(5).select("-password")
+    : await User.find().select("-password").lean(); // .populate("Cart").
   if (!users) {
     res.status(400).json({ message: "No users found" });
     throw new Error("Somehow, there are no users. That's weird.");
@@ -87,6 +90,33 @@ const getUserCart = asyncHandler(async (req, res) => {
     throw new Error("Somehow, there are no carts. That's weird.");
   }
   res.status(200).json(cart);
+});
+
+// @desc Get user's stats
+// @route GET /users/:id/stats
+// @access Private
+const getUserStats = asyncHandler(async (req, res) => {
+  const date = new Date();
+  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+
+  const data = await User.aggregate([
+    {
+      $match: { createdAt: { $gte: lastYear } },
+      $or: { $exists: false },
+    },
+    {
+      $project: {
+        month: { $month: "$createdAt" },
+      },
+    },
+    {
+      $group: {
+        _id: "$month",
+        total: { $sum: 1 },
+      },
+    },
+  ]);
+  res.status(200).json(data);
 });
 
 // @desc Create user
@@ -289,6 +319,7 @@ module.exports = {
   getUserByUsername,
   getUserOrders,
   getUserCart,
+  getUserStats,
   createUser,
   updateUserByBody,
   updateUserById,

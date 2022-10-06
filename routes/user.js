@@ -1,27 +1,39 @@
 const router = require("express").Router();
 const userController = require("../controllers/userController");
-const verifyJWT = require("../middleware/verifyJWT");
-
-router.use(verifyJWT);
+const {
+  isEmployee,
+  sameUserOrAdmin,
+  isAdmin,
+} = require("../middleware/verifyJwt");
 
 router.route("/").get(userController.getUsers);
 
-router.route("/:id").get(userController.getUserById);
+router.route("/:id").get(isEmployee, userController.getUserById);
 
-router.route("/username/:username").get(userController.getUserByUsername);
+router
+  .route("/username/:username")
+  .get(isEmployee, userController.getUserByUsername);
 
-router.route("/:id/orders").get(userController.getUserOrders);
+router.route("/:id/orders").get(sameUserOrAdmin, userController.getUserOrders);
 
-router.route("/:id/cart").get(userController.getUserCart);
+router.route("/:id/cart").get(sameUserOrAdmin, userController.getUserCart);
 
-router.route("/createuser").post(userController.createUser);
+router.route("/stats").get(isAdmin, userController.getUserStats);
 
-router.route("/updateuser/:id").put(userController.updateUserById);
+router.route("/createuser").post(isEmployee, userController.createUser);
 
-router.route("/updateuser").put(userController.updateUserByBody);
+router
+  .route("/updateuser/:id")
+  .put(sameUserOrAdmin, userController.updateUserById);
 
-router.route("/deleteuser/:id").delete(userController.deleteUserByParams);
+router
+  .route("/updateuser")
+  .put(sameUserOrAdmin, userController.updateUserByBody);
 
-router.route("/deleteuser").delete(userController.deleteUserByBody);
+router
+  .route("/deleteuser/:id")
+  .delete(isAdmin, userController.deleteUserByParams);
+
+router.route("/deleteuser").delete(isAdmin, userController.deleteUserByBody);
 
 module.exports = router;

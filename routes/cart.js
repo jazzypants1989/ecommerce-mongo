@@ -1,18 +1,28 @@
 const router = require("express").Router();
+const cartController = require("../controllers/cartController");
 
-router.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+// @desc Get all carts
+// @route GET /carts
+// @access Public
 
-router.post("/", (req, res) => {
-  res.send("Hello World!");
-});
+router.get("/", cartController.getCarts);
 
-router.put("/", (req, res) => {
-  res.send("Hello World!");
-});
+// @desc Get cart by id
+// @route GET /carts/:id
+// @access Public
 
-router.delete("/", (req, res) => {
-  res.send("Hello World!");
-});
+router.get("/:id", cartController.getCartById);
+
+// @desc Get cart by user id
+// @route GET /carts/:userId
+// @access Public
+
+router.get("/:userId", cartController.getCartByUserId);
+
+// @desc Create a cart
+// @route POST /carts
+// @access Private
+
+router.post("/", cartController.createCart);
+
 module.exports = router;

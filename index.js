@@ -9,6 +9,9 @@ const errHandler = require("./middleware/errHandler");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
+const productRoutes = require("./routes/product");
+const orderRoutes = require("./routes/order");
+const cartRoutes = require("./routes/cart");
 require("dotenv").config();
 const coolPort = process.env.PORT;
 
@@ -29,6 +32,10 @@ app.get("/", (req, res) => res.send("API Running"));
 // Define Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/carts", cartRoutes);
+
 // app.use("/api/profile", require("./routes/api/profile"));
 // app.use("/api/posts", require("./routes/api/posts"));
 app.all("*", (req, res) => {
