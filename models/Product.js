@@ -31,6 +31,9 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 1,
     },
+    tags: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { logEvents } = require("../middleware/logger");
 
 const connectDB = async () => {
   try {
@@ -9,6 +10,10 @@ const connectDB = async () => {
     console.log(`HOORAY, THE MONGO WAY: ${conn.connection.host}`);
   } catch (err) {
     console.error(err);
+    logEvents(
+      `${err.message}\t${err.stack}\t${process.env.DB_STRING}`,
+      "error.log"
+    );
     process.exit(1);
   }
 };
