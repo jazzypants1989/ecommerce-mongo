@@ -8,16 +8,15 @@ const asyncHandler = require("express-async-handler");
 const getProducts = asyncHandler(async (req, res) => {
   const qNew = req.query.new;
   const qCategory = req.query.category;
-  let products = [];
+  const qTag = req.query.tag;
+  let products;
 
   if (qNew) {
-    products = await Product.find().sort({ createdAt: -1 }).limit(1);
+    products = await Product.find().sort({ createdAt: -1 }).limit(5);
   } else if (qCategory) {
-    products = await Product.find({
-      categories: {
-        $in: [qCategory],
-      },
-    });
+    products = await Product.find({ category: qCategory });
+  } else if (qTag) {
+    products = await Product.find({ tags: qTag });
   } else {
     products = await Product.find();
   }

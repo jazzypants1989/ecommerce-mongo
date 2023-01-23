@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const path = require("path");
+// const path = require("path");
+
 const corsOptions = require("./config/corsOptions");
 const { logger } = require("./middleware/logger");
 const errHandler = require("./middleware/errHandler");
@@ -12,6 +13,8 @@ const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/product");
 const orderRoutes = require("./routes/order");
 const cartRoutes = require("./routes/cart");
+const payRoutes = require("./routes/pay");
+
 require("dotenv").config();
 const coolPort = process.env.PORT;
 
@@ -35,9 +38,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/carts", cartRoutes);
+app.use("/api/pay", payRoutes);
 
-// app.use("/api/profile", require("./routes/api/profile"));
-// app.use("/api/posts", require("./routes/api/posts"));
 app.all("*", (req, res) => {
   res.status(404);
   if (req.accepts("html")) {

@@ -21,9 +21,6 @@ const productSchema = new mongoose.Schema(
     categories: {
       type: Array,
     },
-    size: {
-      type: String,
-    },
     details: {
       type: Array,
     },
@@ -33,6 +30,10 @@ const productSchema = new mongoose.Schema(
     },
     tags: {
       type: Array,
+    },
+    inStock: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }

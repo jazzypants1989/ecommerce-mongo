@@ -92,8 +92,8 @@ const getUserCart = asyncHandler(async (req, res) => {
   res.status(200).json(cart);
 });
 
-// @desc Get user's stats
-// @route GET /users/:id/stats
+// @desc Get user stats
+// @route GET /users/stats
 // @access Private
 const getUserStats = asyncHandler(async (req, res) => {
   const date = new Date();

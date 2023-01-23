@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 
 // @desc Get all carts
 // @route GET /carts
-// @access Public
+// @access Admin
 
 const getCarts = asyncHandler(async (req, res) => {
   const carts = await Cart.find();
@@ -16,14 +16,14 @@ const getCarts = asyncHandler(async (req, res) => {
 
 // @desc Get cart by id
 // @route GET /carts/:id
-// @access Public
+// @access Employee
 
 const getCartById = asyncHandler(async (req, res) => {
   const cart = await Cart.findById(req.params.id);
   if (!cart) {
     res.status(400).json({ message: "No cart found" });
     throw new Error(
-      "I don't think that cart exists. Imaginary friends are not allowed."
+      "I don't think that cart exists. You should maybe buy something. That would be cool."
     );
   }
   res.status(200).json(cart);
@@ -31,14 +31,14 @@ const getCartById = asyncHandler(async (req, res) => {
 
 // @desc Get cart by user id
 // @route GET /carts/:userId
-// @access Public
+// @access Same user or admin
 
 const getCartByUserId = asyncHandler(async (req, res) => {
   const cart = await Cart.findOne({ userId: req.params.userId });
   if (!cart) {
     res.status(400).json({ message: "No cart found" });
     throw new Error(
-      "I don't think that cart exists. Imaginary friends are not allowed."
+      "I don't think that cart exists. More customers would be cool."
     );
   }
   res.status(200).json(cart);
@@ -46,7 +46,7 @@ const getCartByUserId = asyncHandler(async (req, res) => {
 
 // @desc Create a cart
 // @route POST /carts
-// @access Private
+// @access Any user
 
 const createCart = asyncHandler(async (req, res) => {
   const { userId, products } = req.body;
@@ -60,7 +60,7 @@ const createCart = asyncHandler(async (req, res) => {
 
 // @desc Update a cart
 // @route PUT /carts/:id
-// @access Private
+// @access Same user or admin
 
 const updateCart = asyncHandler(async (req, res) => {
   const { userId, products } = req.body;
@@ -78,7 +78,7 @@ const updateCart = asyncHandler(async (req, res) => {
 
 // @desc Delete a cart
 // @route DELETE /carts/:id
-// @access Private
+// @access Same user or admin
 
 const deleteCart = asyncHandler(async (req, res) => {
   const cart = await Cart.findById(req.params.id);
